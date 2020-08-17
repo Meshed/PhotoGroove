@@ -2,7 +2,7 @@ module PhotoGroove exposing (main)
 
 import Browser
 import Html exposing (..)
-import Html.Attributes as Attr exposing (class, src, id, classList, name, type_, title, max)
+import Html.Attributes as Attr exposing (class, src, id, classList, name, type_, title)
 import Html.Events exposing (onClick)
 import Http
 import Json.Decode exposing ( Decoder, int, string, succeed, list)
@@ -147,11 +147,11 @@ update msg model =
                     ( model, Cmd.none)
                 Loading ->
                     ( model, Cmd.none)
-                Errored errorMessage ->
+                Errored _ ->
                     ( model, Cmd.none)
         GotPhotos (Ok photos) ->
             case photos of
-                first :: rest ->
+                first :: _ ->
                     ({ model | status = Loaded photos first.url}
                     , Cmd.none
                     )

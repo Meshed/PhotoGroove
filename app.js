@@ -6551,7 +6551,6 @@ var $author$project$PhotoGroove$update = F2(
 					case 'Loading':
 						return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
 					default:
-						var errorMessage = _v1.a;
 						return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
 				}
 			default:
@@ -6559,7 +6558,6 @@ var $author$project$PhotoGroove$update = F2(
 					var photos = msg.a.a;
 					if (photos.b) {
 						var first = photos.a;
-						var rest = photos.b;
 						return _Utils_Tuple2(
 							_Utils_update(
 								model,
