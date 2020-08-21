@@ -16,8 +16,13 @@
             var rangeSliderNode = this;
 
             jsr.addEventListener("update", function (elem, value) {
+                var event = new CustomEvent("slide", {
+                    detail: { userSlidTo: value }
+                });
 
-            })
+                // console.log("test");
+                rangeSliderNode.dispatchEvent(event);
+            });
         }
     }
 
