@@ -6281,7 +6281,7 @@ var $author$project$PhotoGroove$initialCmd = $elm$http$Http$get(
 	});
 var $author$project$PhotoGroove$Loading = {$: 'Loading'};
 var $author$project$PhotoGroove$Medium = {$: 'Medium'};
-var $author$project$PhotoGroove$initialModel = {chosenSize: $author$project$PhotoGroove$Medium, hue: 5, noise: 5, ripple: 5, status: $author$project$PhotoGroove$Loading};
+var $author$project$PhotoGroove$initialModel = {chosenSize: $author$project$PhotoGroove$Medium, hue: 0, noise: 0, ripple: 0, status: $author$project$PhotoGroove$Loading};
 var $elm$core$Platform$Sub$batch = _Platform_batch;
 var $elm$core$Platform$Sub$none = $elm$core$Platform$Sub$batch(_List_Nil);
 var $author$project$PhotoGroove$Errored = function (a) {
