@@ -1,4 +1,4 @@
-port module PhotoGroove exposing (..)
+port module PhotoGroove exposing (main, photoDecoder)
 
 import Browser
 import Html exposing (..)
@@ -145,7 +145,7 @@ photoDecoder =
     succeed Photo
         |> required "url" string
         |> required "size" int
-        |> optional "title" string "(untitlted)"
+        |> optional "title" string "(untitled)"
 
 
 type Status
