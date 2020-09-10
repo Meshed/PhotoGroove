@@ -1,7 +1,8 @@
 module PhotoFolders exposing (main)
 
 import Browser
-import Html exposing (Html, h1, text)
+import Dict exposing (Dict)
+import Html exposing (Html, div, h1, h2, h3, img, span, text)
 import Html.Attributes exposing (class, src)
 import Html.Events exposing (onClick)
 import Http
@@ -11,6 +12,15 @@ import Json.Decode.Pipeline exposing (required)
 
 type alias Model =
     { selectedPhotoUrl : Maybe String
+    , photos : Dict String Photo
+    }
+
+
+type alias Photo =
+    { title : String
+    , size : Int
+    , relatedUrls : List String
+    , url : String
     }
 
 
@@ -31,12 +41,22 @@ main =
 
 view : Model -> Html Msg
 view model =
-    h1 [] [ text "The Grooviest Folders the world has ever seen" ]
+    let
+        photoByUrl : String -> Maybe Photo
+        photoByUrl url =
+            Dict.get url model.photos
 
+        selectedPhoto : Html Msg
+        selectedPhoto =
+            case Maybe.andThen photoByUrl model.selectedPhotoUrl of
+                Just photo ->
+                    viewSelectedPhoto photo
 
-initialModel : Model
-initialModel =
-    { selectedPhotoUrl = Nothing }
+                Nothing ->
+                    text ""
+    in
+    div [ class "content" ]
+        [ div [ class "selected-photo" ] [ selectedPhoto ] ]
 
 
 init : () -> ( Model, Cmd Msg )
@@ -47,11 +67,6 @@ init _ =
         , expect = Http.expectJson GotInitialModel modelDecoder
         }
     )
-
-
-modelDecoder : Decoder Model
-modelDecoder =
-    Decode.succeed initialModel
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -65,3 +80,69 @@ update msg model =
 
         GotInitialModel (Err _) ->
             ( model, Cmd.none )
+
+
+initialModel : Model
+initialModel =
+    { selectedPhotoUrl = Nothing
+    , photos = Dict.empty
+    }
+
+
+modelDecoder : Decoder Model
+modelDecoder =
+    Decode.succeed
+        { selectedPhotoUrl = Just "trevi"
+        , photos =
+            Dict.fromList
+                [ ( "trevi"
+                  , { title = "Trevi"
+                    , relatedUrls = [ "coli", "fresco" ]
+                    , size = 34
+                    , url = "trevi"
+                    }
+                  )
+                , ( "fresco"
+                  , { title = "Fresco"
+                    , relatedUrls = [ "trevi" ]
+                    , size = 46
+                    , url = "fresco"
+                    }
+                  )
+                , ( "coli"
+                  , { title = "Coliseum"
+                    , relatedUrls = [ "trevi", "fresco" ]
+                    , size = 36
+                    , url = "coli"
+                    }
+                  )
+                ]
+        }
+
+
+viewSelectedPhoto : Photo -> Html Msg
+viewSelectedPhoto photo =
+    div
+        [ class "selected-photo" ]
+        [ h2 [] [ text photo.title ]
+        , img [ src (urlPrefix ++ "photos/" ++ photo.url ++ "/full") ] []
+        , span [] [ text (String.fromInt photo.size ++ "KB") ]
+        , h3 [] [ text "Related" ]
+        , div [ class "related-photos" ]
+            (List.map viewRelatedPhoto photo.relatedUrls)
+        ]
+
+
+viewRelatedPhoto : String -> Html Msg
+viewRelatedPhoto url =
+    img
+        [ class "related-photo"
+        , onClick (ClickedPhoto url)
+        , src (urlPrefix ++ "photos/" ++ url ++ "/thumb")
+        ]
+        []
+
+
+urlPrefix : String
+urlPrefix =
+    "http://elm-in-action.com/"
