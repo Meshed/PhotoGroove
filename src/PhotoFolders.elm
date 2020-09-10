@@ -2,7 +2,7 @@ module PhotoFolders exposing (main)
 
 import Browser
 import Dict exposing (Dict)
-import Html exposing (Html, div, h1, h2, h3, img, span, text)
+import Html exposing (Html, div, h1, h2, h3, img, label, span, text)
 import Html.Attributes exposing (class, src)
 import Html.Events exposing (onClick)
 import Http
@@ -78,7 +78,12 @@ view model =
                     text ""
     in
     div [ class "content" ]
-        [ div [ class "selected-photo" ] [ selectedPhoto ] ]
+        [ div [ class "folders" ]
+            [ h1 [] [ text "Folders" ]
+            , viewFolder model.root
+            ]
+        , div [ class "selected-photo" ] [ selectedPhoto ]
+        ]
 
 
 init : () -> ( Model, Cmd Msg )
@@ -200,3 +205,15 @@ viewRelatedPhoto url =
 urlPrefix : String
 urlPrefix =
     "http://elm-in-action.com/"
+
+
+viewFolder : Folder -> Html Msg
+viewFolder (Folder folder) =
+    let
+        subfolders =
+            List.map viewFolder folder.subfolders
+    in
+    div [ class "folder" ]
+        [ label [] [ text folder.name ]
+        , div [ class "subfolders" ] subfolders
+        ]
