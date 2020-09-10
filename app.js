@@ -6109,7 +6109,15 @@ var $elm$http$Http$get = function (r) {
 	return $elm$http$Http$request(
 		{body: $elm$http$Http$emptyBody, expect: r.expect, headers: _List_Nil, method: 'GET', timeout: $elm$core$Maybe$Nothing, tracker: $elm$core$Maybe$Nothing, url: r.url});
 };
-var $author$project$PhotoFolders$initialModel = {photos: $elm$core$Dict$empty, selectedPhotoUrl: $elm$core$Maybe$Nothing};
+var $author$project$PhotoFolders$Folder = function (a) {
+	return {$: 'Folder', a: a};
+};
+var $author$project$PhotoFolders$initialModel = {
+	photos: $elm$core$Dict$empty,
+	root: $author$project$PhotoFolders$Folder(
+		{name: 'Loading...', photoUrls: _List_Nil, subfolders: _List_Nil}),
+	selectedPhotoUrl: $elm$core$Maybe$Nothing
+};
 var $elm$core$Dict$fromList = function (assocs) {
 	return A3(
 		$elm$core$List$foldl,
@@ -6155,6 +6163,44 @@ var $author$project$PhotoFolders$modelDecoder = $elm$json$Json$Decode$succeed(
 						url: 'coli'
 					})
 				])),
+		root: $author$project$PhotoFolders$Folder(
+			{
+				name: 'Photos',
+				photoUrls: _List_Nil,
+				subfolders: _List_fromArray(
+					[
+						$author$project$PhotoFolders$Folder(
+						{
+							name: '2016',
+							photoUrls: _List_fromArray(
+								['trevi', 'coli']),
+							subfolders: _List_fromArray(
+								[
+									$author$project$PhotoFolders$Folder(
+									{name: 'outdoors', photoUrls: _List_Nil, subfolders: _List_Nil}),
+									$author$project$PhotoFolders$Folder(
+									{
+										name: 'indoors',
+										photoUrls: _List_fromArray(
+											['fresco']),
+										subfolders: _List_Nil
+									})
+								])
+						}),
+						$author$project$PhotoFolders$Folder(
+						{
+							name: '2017',
+							photoUrls: _List_Nil,
+							subfolders: _List_fromArray(
+								[
+									$author$project$PhotoFolders$Folder(
+									{name: 'outdoors', photoUrls: _List_Nil, subfolders: _List_Nil}),
+									$author$project$PhotoFolders$Folder(
+									{name: 'indoors', photoUrls: _List_Nil, subfolders: _List_Nil})
+								])
+						})
+					])
+			}),
 		selectedPhotoUrl: $elm$core$Maybe$Just('trevi')
 	});
 var $author$project$PhotoFolders$init = function (_v0) {
